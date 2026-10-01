@@ -1,0 +1,16 @@
+{
+  "name": "christian-ethics-classifier",
+  "private": true,
+  "workspaces": [
+    "apps/api",
+    "apps/web"
+  ],
+  "scripts": {
+    "dev:api": "bun --cwd apps/api dev",
+    "dev:web": "bun --cwd apps/web dev",
+    "build": "bun --cwd apps/web build",
+    "test:api": "bun --cwd apps/api test",
+    "validate:dataset": "python scripts/validate_dataset.py"
+  }
+}
+

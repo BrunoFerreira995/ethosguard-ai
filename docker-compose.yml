@@ -1,0 +1,45 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:3102
+    ports:
+      - "3101:3101"
+    depends_on:
+      api:
+        condition: service_started
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    environment:
+      API_PORT: 3102
+      GLINER_SERVICE_URL: http://gliner-service:8000
+      CORS_ORIGIN: http://localhost:3101
+      MAX_TEXT_LENGTH: 5000
+      REQUEST_TIMEOUT_MS: 30000
+      RETRY_ATTEMPTS: 2
+      RATE_LIMIT_WINDOW_MS: 60000
+      RATE_LIMIT_MAX_REQUESTS: 30
+      CACHE_ENABLED: "true"
+    ports:
+      - "3102:3102"
+    depends_on:
+      gliner-service:
+        condition: service_started
+
+  gliner-service:
+    build:
+      context: .
+      dockerfile: services/gliner/Dockerfile
+    environment:
+      GLINER_MODEL: ${GLINER_MODEL:-fastino/gliner2.5-multi-v1}
+      ETHICS_CONFIG_PATH: /app/config/ethics.json
+      CORS_ORIGIN: http://api:3102
+      LOG_LEVEL: INFO
+    ports:
+      - "8000:8000"
+

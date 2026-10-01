@@ -1,0 +1,146 @@
+{
+  "virtues": {
+    "charity": {
+      "label": "caridade",
+      "description": "Ações motivadas pelo amor ao próximo e cuidado com outras pessoas."
+    },
+    "honesty": {
+      "label": "honestidade",
+      "description": "Compromisso com a verdade e rejeição à mentira, fraude ou engano."
+    },
+    "humility": {
+      "label": "humildade",
+      "description": "Reconhecimento dos próprios limites e disposição para servir sem superioridade."
+    },
+    "justice": {
+      "label": "justiça",
+      "description": "Respeito à dignidade, aos direitos e ao tratamento justo das pessoas."
+    },
+    "prudence": {
+      "label": "prudência",
+      "description": "Deliberação cuidadosa sobre consequências e responsabilidades antes de agir."
+    },
+    "temperance": {
+      "label": "temperança",
+      "description": "Moderação de desejos e ações para evitar excessos prejudiciais."
+    },
+    "fortitude": {
+      "label": "fortaleza",
+      "description": "Coragem e perseverança para fazer o bem diante de dificuldades."
+    },
+    "forgiveness": {
+      "label": "perdão",
+      "description": "Disposição para abandonar a vingança e buscar reconciliação responsável."
+    },
+    "compassion": {
+      "label": "compaixão",
+      "description": "Atenção solidária ao sofrimento de outras pessoas e resposta cuidadosa a ele."
+    },
+    "mercy": {
+      "label": "misericórdia",
+      "description": "Resposta que alivia sofrimento e considera a vulnerabilidade humana."
+    }
+  },
+  "principles": {
+    "neighbor_love": {
+      "label": "amor ao próximo",
+      "description": "Buscar o bem de outras pessoas com respeito e cuidado."
+    },
+    "human_dignity": {
+      "label": "dignidade humana",
+      "description": "Reconhecer o valor de cada pessoa e evitar sua desumanização."
+    },
+    "truth": {
+      "label": "verdade",
+      "description": "Comunicar e buscar a verdade sem mentira, fraude ou engano deliberado."
+    },
+    "justice": {
+      "label": "justiça",
+      "description": "Promover equidade, direitos e responsabilidade nas relações."
+    },
+    "mercy": {
+      "label": "misericórdia",
+      "description": "Cuidar de quem sofre e reduzir danos com compaixão."
+    },
+    "forgiveness": {
+      "label": "perdão",
+      "description": "Abrir espaço para reparação e reconciliação quando isso for seguro e apropriado."
+    },
+    "responsibility": {
+      "label": "responsabilidade",
+      "description": "Assumir consequências, deveres e efeitos das próprias decisões."
+    },
+    "vulnerable_care": {
+      "label": "cuidado com vulneráveis",
+      "description": "Proteger e apoiar pessoas expostas a necessidade, risco ou dependência."
+    }
+  },
+  "ethical_issues": {
+    "lie": {
+      "label": "mentira",
+      "description": "Afirmação enganosa ou ocultação deliberada para induzir alguém ao erro."
+    },
+    "dishonesty": {
+      "label": "desonestidade",
+      "description": "Conduta que abandona a honestidade por meio de engano, omissão ou falsidade."
+    },
+    "fraud": {
+      "label": "fraude",
+      "description": "Engano planejado para obter vantagem indevida ou causar prejuízo."
+    },
+    "greed": {
+      "label": "ganância",
+      "description": "Busca desordenada de riqueza, poder ou vantagem às custas de outras pessoas."
+    },
+    "violence": {
+      "label": "violência",
+      "description": "Uso ou ameaça de força para ferir, intimidar ou controlar."
+    },
+    "manipulation": {
+      "label": "manipulação",
+      "description": "Influência enganosa ou coercitiva que reduz a autonomia de alguém."
+    },
+    "exploitation": {
+      "label": "exploração",
+      "description": "Aproveitamento injusto da vulnerabilidade ou dependência de outra pessoa."
+    },
+    "injustice": {
+      "label": "injustiça",
+      "description": "Tratamento desigual, opressivo ou contrário aos direitos de uma pessoa."
+    },
+    "corruption": {
+      "label": "corrupção",
+      "description": "Uso indevido de poder ou função para benefício particular."
+    },
+    "selfishness": {
+      "label": "egoísmo",
+      "description": "Priorizar o próprio interesse ignorando necessidades e direitos alheios."
+    },
+    "abuse": {
+      "label": "abuso",
+      "description": "Uso danoso de poder, confiança ou autoridade contra outra pessoa."
+    }
+  },
+  "moral_classification": {
+    "virtuous": {
+      "label": "virtuoso",
+      "description": "A ação demonstra virtudes e respeita os princípios configurados."
+    },
+    "acceptable": {
+      "label": "aceitável",
+      "description": "A ação não apresenta conflito ético relevante nas categorias configuradas."
+    },
+    "ambiguous": {
+      "label": "moralmente ambíguo",
+      "description": "Faltam informações ou existem valores em tensão para uma conclusão clara."
+    },
+    "problematic": {
+      "label": "problemático",
+      "description": "A ação apresenta um ou mais problemas éticos relevantes."
+    },
+    "incompatible": {
+      "label": "incompatível com os princípios definidos",
+      "description": "A ação entra em conflito forte com os princípios configurados no sistema."
+    }
+  }
+}
