@@ -1,4 +1,25 @@
+[project]
+name = "ethosguard-gliner"
+version = "1.0.0"
+description = "FastAPI service for configurable Christian ethics classification with GLiNER"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "fastapi>=0.115,<1",
+    "uvicorn[standard]>=0.30,<1",
+    "gliner2[local]>=2.0,<3",
+    "protobuf>=5,<7",
+    "sentencepiece>=0.2,<1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8,<9",
+    "httpx2>=2,<3",
+]
+
+[tool.uv]
+package = false
+
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
-

@@ -59,7 +59,7 @@ config/ethics.json
 ## Requisitos e instalação local
 
 - Bun 1.x
-- Python 3.10 ou superior
+- Python 3.11 ou 3.12 (3.12 para o deploy no Vercel)
 - Docker e Docker Compose, caso use a execução conteinerizada
 - Memória suficiente para o checkpoint local; a primeira inicialização baixa o modelo
 
