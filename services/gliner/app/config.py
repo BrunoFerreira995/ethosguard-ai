@@ -25,6 +25,9 @@ def config_path() -> Path:
     configured = os.getenv("ETHICS_CONFIG_PATH")
     if configured:
         return Path(configured)
+    bundled = Path(__file__).resolve().parents[1] / "config" / "ethics.json"
+    if bundled.exists():
+        return bundled
     return Path(__file__).resolve().parents[3] / "config" / "ethics.json"
 
 
@@ -34,4 +37,3 @@ def load_ethics_config(path: Path | None = None) -> EthicsConfig:
     if not isinstance(raw, dict):
         raise ValueError("A configuração de ética deve ser um objeto JSON")
     return EthicsConfig(groups=raw)
-

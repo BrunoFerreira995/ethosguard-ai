@@ -42,7 +42,7 @@ export class HttpGlinerClient implements GlinerClient {
     let lastError: unknown;
     for (let attempt = 0; attempt <= attempts; attempt += 1) {
       try {
-        const response = await fetch(`${this.config.glinerServiceUrl.replace(/\/$/, "")}${path}`, {
+        const response = await fetch(new URL(path.replace(/^\//, ""), `${this.config.glinerServiceUrl.replace(/\/$/, "")}/`), {
           ...init,
           signal: AbortSignal.timeout(this.config.requestTimeoutMs)
         });
@@ -62,4 +62,3 @@ export class HttpGlinerClient implements GlinerClient {
     throw new AppError("GLiNER request failed", 502, "Não foi possível concluir a análise agora.");
   }
 }
-

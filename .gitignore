@@ -13,4 +13,4 @@ venv/
 *.log
 .cache/
 models/
-
+/services/gliner/config/

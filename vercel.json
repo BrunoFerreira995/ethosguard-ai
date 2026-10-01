@@ -1,0 +1,27 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "api": {
+      "root": "apps/api",
+      "framework": "elysia",
+      "entrypoint": "src/server.ts",
+      "bindings": [
+        { "type": "service", "service": "gliner", "format": "url", "env": "GLINER_URL" }
+      ]
+    },
+    "web": {
+      "root": "apps/web",
+      "framework": "nextjs"
+    },
+    "gliner": {
+      "root": "services/gliner",
+      "framework": "fastapi",
+      "entrypoint": "app.main:app",
+      "buildCommand": "mkdir -p config && cp ../../config/ethics.json config/ethics.json"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": { "service": "api" } },
+    { "source": "/(.*)", "destination": { "service": "web" } }
+  ]
+}

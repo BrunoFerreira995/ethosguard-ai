@@ -1,8 +1,43 @@
 # EthosGuard
 
-Aplicação full-stack para analisar textos e situações morais usando categorias de ética cristã configuráveis. O sistema retorna uma classificação estruturada baseada no modelo local Fastino GLiNER 2.5 Multi e nas definições de [`config/ethics.json`](config/ethics.json).
+**Análise de textos com IA e categorias explícitas de ética cristã.**
 
-A análise é uma ferramenta de apoio. Ela descreve correspondências com as categorias configuradas e não se apresenta como autoridade religiosa absoluta.
+EthosGuard é um projeto full-stack que transforma relatos de situações cotidianas em uma análise estruturada de virtudes, princípios e possíveis conflitos éticos. As categorias são configuráveis em JSON, e a inferência usa o modelo local Fastino GLiNER 2.5 Multi.
+
+O projeto reúne uma interface em Next.js, uma API em Bun + Elysia e um serviço de inferência em Python + FastAPI. É uma implementação para explorar classificação semântica, integração entre serviços e respostas com evidências extraídas do texto.
+
+## O que o projeto entrega
+
+- Classificação moral com pontuação de confiança retornada pelo modelo.
+- Identificação de virtudes, princípios e problemas éticos, com evidências quando disponíveis.
+- Resumo e raciocínio construídos a partir das categorias e dos resultados da classificação.
+- Categorias e descrições editáveis em [`config/ethics.json`](config/ethics.json).
+- API com validação de entrada, timeout, tentativas de recuperação, cache e limite de requisições.
+- Execução local, configuração Docker Compose e configuração de múltiplos serviços no Vercel.
+
+## Exemplo de uso
+
+> “Encontrei uma carteira e devolvi ao proprietário.”
+
+Categorias de referência para esse cenário incluem **honestidade**, **justiça** e **virtuoso**. A interface apresenta a classificação, as pontuações e a explicação correspondente. Esse exemplo indica o comportamento esperado; o resultado real depende do checkpoint e dos limiares usados.
+
+## Tecnologias e responsabilidades
+
+| Camada | Tecnologias | Responsabilidade |
+| --- | --- | --- |
+| Interface | Next.js, React, TypeScript | Entrada de texto e apresentação da análise |
+| API | Bun, Elysia, TypeScript | Validação, controle de requisições e integração com a inferência |
+| Inferência | Python, FastAPI, GLiNER2 | Extração e classificação com o checkpoint local |
+| Configuração | JSON e JSONL | Categorias de ética e corpus inicial para evolução |
+| Execução | Docker Compose, Vercel Services | Configuração dos três serviços |
+
+## Estágio atual e limites
+
+O fluxo atual usa GLiNER e regras de explicação configuradas. A integração com um provedor LLM e o fine-tuning são possibilidades futuras; não fazem parte da análise atual. O dataset incluído é um corpus inicial, sem resultados de avaliação quantitativa publicados neste README.
+
+As pontuações do modelo não representam certeza sobre um julgamento moral. A análise descreve correspondências com as categorias escolhidas e serve como apoio à reflexão. O contexto ético adotado é explícito e configurável.
+
+A configuração Vercel está preparada para revisão, mas a execução conjunta pelo CLI e a inicialização do checkpoint real no ambiente Vercel ainda precisam ser verificadas.
 
 ## Arquitetura
 
@@ -56,6 +91,41 @@ python3 -m pip install -r services/gliner/requirements.txt
 
 Espere o endpoint <http://localhost:8000/health> responder antes de usar a interface. A API Bun retorna `502` enquanto o processo Python ainda está carregando ou se ele encerrou durante o carregamento.
 
+## Vercel Services
+
+Configure o projeto Vercel com a raiz do repositório. `vercel.json` define
+`web` (Next.js, público em `/`), `api` (Elysia, público em `/api/*`) e
+`gliner` (FastAPI, interno). O prefixo `/api` é preservado e já faz parte
+das rotas da API. `/health` da API continua disponível apenas internamente;
+o endpoint público é `/api/health`.
+
+A API recebe `GLINER_URL` pelo binding para `gliner`. Não defina essa variável
+manualmente. Não configure `NEXT_PUBLIC_API_URL`, `GLINER_SERVICE_URL` nem o
+`ETHICS_CONFIG_PATH` local no Vercel. O navegador usa `/api/analyze` no mesmo
+domínio, sem binding no frontend. `GLINER_SERVICE_URL` e `NEXT_PUBLIC_API_URL`
+continuam disponíveis para execução local separada e Docker.
+
+O build do GLiNER copia `config/ethics.json` para a raiz do serviço. O serviço
+carrega esse arquivo antes de recorrer ao caminho usado no desenvolvimento.
+O checkpoint e as dependências de inferência precisam caber nos limites de
+pacote, memória e tempo do runtime Python do Vercel; valide um preview com
+o modelo real antes de usar em produção. Cache e rate limit da API ficam
+na memória de cada instância, sem coordenação entre instâncias.
+
+Teste os serviços juntos a partir da raiz, com Vercel CLI instalado:
+
+```bash
+vercel dev
+# Em outro terminal, usando a porta informada pelo CLI:
+curl http://localhost:3000/api/health
+curl -X POST http://localhost:3000/api/analyze \
+  -H 'content-type: application/json' \
+  -d '{"text":"Encontrei uma carteira e devolvi ao proprietário."}'
+```
+
+O CLI injeta o binding em runtime; ele não está disponível no build ou no
+middleware. Confira também a interface no endereço informado pelo CLI.
+
 ## Docker
 
 ```bash
@@ -72,33 +142,7 @@ GLINER_MODEL=fastino/gliner2.5-base-v1 docker compose up --build gliner-service
 
 O padrão é `fastino/gliner2.5-multi-v1`, apropriado para entradas multilíngues. O modelo alternativo deve ser compatível com `AutoExtractor`.
 
-### Recuperação do Docker Desktop no macOS
-
-Se o Compose mostrar `metadata.v1.bolt/meta.db: input/output error` ou `blob ... expected ... input/output error`, verifique primeiro o espaço livre no macOS. O Docker Desktop precisa gravar no disco do host para atualizar o armazenamento de imagens:
-
-```bash
-df -h /
-bun pm cache
-du -sh "$(bun pm cache)"
-```
-
-Se houver menos de alguns gigabytes livres, limpe o cache global do Bun, que pode ser baixado novamente quando necessário:
-
-```bash
-bun pm cache rm
-df -h /
-```
-
-Preserve o cache do Hugging Face se já tiver baixado o checkpoint GLiNER: apagá-lo obriga a baixar o modelo novamente. Reinicie o Docker Desktop após liberar espaço e confirme que `docker info` funciona. Depois reconstrua:
-
-```bash
-docker pull oven/bun:1
-docker pull python:3.11-slim
-docker compose build --pull --no-cache
-docker compose up
-```
-
-Se o erro continuar mesmo com espaço livre, abra Docker Desktop → **Troubleshoot** → **Restart Docker Desktop**. Use **Clean / Purge data** apenas como último recurso: essa opção remove todos os containers e imagens locais do Docker Desktop. Faça backup de volumes de outros projetos antes dessa operação.
+Para problemas de armazenamento ou inicialização no macOS, consulte o [guia de solução de problemas](docs/troubleshooting.md).
 
 ## Categorias
 

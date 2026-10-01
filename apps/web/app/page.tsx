@@ -60,7 +60,7 @@ export default function Home() {
     }
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3102"}/api/analyze`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? ""}/api/analyze`, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ text })

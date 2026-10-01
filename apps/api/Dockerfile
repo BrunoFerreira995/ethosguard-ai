@@ -9,5 +9,4 @@ COPY apps/api apps/api
 WORKDIR /app/apps/api
 ENV NODE_ENV=production
 EXPOSE 3102
-CMD ["bun", "src/server.ts"]
-
+CMD ["bun", "src/local.ts"]
