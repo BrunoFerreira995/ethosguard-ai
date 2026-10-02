@@ -5,4 +5,11 @@ __pycache__
 .pytest_cache
 *.pyc
 .env
-
+.venv
+**/.venv
+**/.next
+**/node_modules
+.vercel
+**/.vercel
+models
+.cache

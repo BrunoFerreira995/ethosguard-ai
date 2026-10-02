@@ -14,10 +14,9 @@
       "framework": "nextjs"
     },
     "gliner": {
-      "root": "services/gliner",
-      "framework": "fastapi",
-      "entrypoint": "app.main:app",
-      "buildCommand": "mkdir -p config && cp ../../config/ethics.json config/ethics.json"
+      "root": ".",
+      "runtime": "container",
+      "entrypoint": "services/gliner/Dockerfile.vercel"
     }
   },
   "rewrites": [

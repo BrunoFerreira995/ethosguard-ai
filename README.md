@@ -105,12 +105,29 @@ manualmente. Não configure `NEXT_PUBLIC_API_URL`, `GLINER_SERVICE_URL` nem o
 domínio, sem binding no frontend. `GLINER_SERVICE_URL` e `NEXT_PUBLIC_API_URL`
 continuam disponíveis para execução local separada e Docker.
 
-O build do GLiNER copia `config/ethics.json` para a raiz do serviço. O serviço
-carrega esse arquivo antes de recorrer ao caminho usado no desenvolvimento.
-O checkpoint e as dependências de inferência precisam caber nos limites de
-pacote, memória e tempo do runtime Python do Vercel; valide um preview com
-o modelo real antes de usar em produção. Cache e rate limit da API ficam
-na memória de cada instância, sem coordenação entre instâncias.
+O GLiNER usa o runtime `container` e o arquivo
+[`services/gliner/Dockerfile.vercel`](services/gliner/Dockerfile.vercel).
+A raiz desse serviço é `.` para que o build tenha acesso ao código Python e
+à configuração compartilhada em `config/ethics.json`. O Dockerfile copia
+somente os arquivos necessários, instala as dependências do `uv.lock` sem
+as ferramentas de desenvolvimento e inicia o FastAPI na porta `PORT` (80
+por padrão).
+
+O lockfile seleciona PyTorch CPU no Linux, evitando as dependências
+CUDA/NVIDIA que contribuíam para o pacote Python de 5,4 GB. O cache de modelos
+usa `/tmp/huggingface`; o checkpoint é baixado na inicialização e o cache
+pode precisar ser recriado em novas instâncias.
+
+O Vercel constrói a imagem durante o deploy. O build da imagem e a
+inicialização do checkpoint real ainda precisam ser validados. Confira os
+limites de imagem, memória e duração aplicáveis ao projeto na
+[documentação de Container Images](https://vercel.com/docs/functions/container-images).
+Cache e rate limit da API ficam na memória de cada instância, sem
+coordenação entre instâncias.
+
+Para usar `vercel dev` com esse runtime, é necessário ter o CLI e o daemon
+Docker disponíveis. A configuração pode ser revisada sem executar Docker
+localmente; isso não substitui a validação da imagem no deploy.
 
 Teste os serviços juntos a partir da raiz, com Vercel CLI instalado:
 
